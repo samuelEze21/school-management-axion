@@ -28,8 +28,12 @@ const SUPERADMIN_USERNAME              = process.env.SUPERADMIN_USERNAME || null
 const SUPERADMIN_PASSWORD              = process.env.SUPERADMIN_PASSWORD || null;
 const SUPERADMIN_EMAIL                 = process.env.SUPERADMIN_EMAIL || null;
 
-if(!LONG_TOKEN_SECRET || !SHORT_TOKEN_SECRET || !NACL_SECRET) {
-    throw Error('missing .env variables check index.config');
+const missing = [];
+if (!LONG_TOKEN_SECRET) missing.push('LONG_TOKEN_SECRET');
+if (!SHORT_TOKEN_SECRET) missing.push('SHORT_TOKEN_SECRET');
+if (!NACL_SECRET) missing.push('NACL_SECRET');
+if (missing.length) {
+    throw new Error('Missing required env: ' + missing.join(', ') + '. Set them in Render Environment or .env.');
 }
 
 config.dotEnv = {
