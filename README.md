@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# school-management-axion
-=======
 # School Management System API
 
 ## For evaluators — quick run
@@ -19,7 +16,7 @@ In another terminal (API must be running):
 npm test
 ```
 
-**First login:** `POST /api/user/login` with body `{"username":"superadmin","password":"Admin@1234"}`. Use header **`token: <jwt>`** for protected routes. Health: `GET /health`.
+**First login:** `POST /api/user/login` with the username and password you set in `.env` (see `.env.example` for variable names). Use header **`token: <jwt>`** for protected routes. Health: `GET /health`.
 
 **Folder/zip submission:** The project includes a `.env` file with defaults for Redis at `127.0.0.1:6379`. When uploading the folder or a zip, include everything (with or without `node_modules`; evaluators can run `npm install`). See `SUBMISSION.md` for text to paste into the submission form description field.
 
@@ -70,35 +67,34 @@ The API will start on the port defined by `USER_PORT` (default `5111`).
 
 ## Environment Variables
 
-| Variable             | Default                        | Required | Description                               |
-|----------------------|--------------------------------|----------|-------------------------------------------|
-| SERVICE_NAME         | `school-management`           | Yes      | Service name (for logs/health).          |
-| USER_PORT            | `5111`                        | Yes      | HTTP server port.                         |
-| REDIS_URI            | `redis://127.0.0.1:6379`      | Yes      | Generic Redis URI.                        |
-| CORTEX_REDIS         | `redis://127.0.0.1:6379`      | Yes      | Redis for ion-cortex.                     |
-| CORTEX_PREFIX        | `school`                      | Yes      | Key prefix for ion-cortex.                |
-| CORTEX_TYPE          | `school-management`           | Yes      | Cortex type identifier.                   |
-| OYSTER_REDIS         | `redis://127.0.0.1:6379`      | Yes      | Redis for OysterDB.                       |
-| OYSTER_PREFIX        | `school`                      | Yes      | OysterDB key prefix.                      |
-| CACHE_REDIS          | `redis://127.0.0.1:6379`      | Yes      | Redis for cache layer.                    |
-| CACHE_PREFIX         | `school:ch`                   | Yes      | Cache key prefix.                         |
-| LONG_TOKEN_SECRET    | `change-this-long-secret`     | Yes      | JWT secret for long tokens.               |
-| SHORT_TOKEN_SECRET   | `change-this-short-secret`    | Yes      | JWT secret for short tokens.              |
-| NACL_SECRET          | `change-this-nacl-secret`     | Yes      | Symmetric secret (if needed by template). |
-| SUPERADMIN_USERNAME  | `superadmin`                  | Yes      | Initial superadmin username.              |
-| SUPERADMIN_PASSWORD  | `Admin@1234`                  | Yes      | Initial superadmin password.              |
-| SUPERADMIN_EMAIL     | `admin@school.com`            | Yes      | Initial superadmin email.                 |
+Set these in your environment or `.env` (never commit real `.env`; use `.env.example` as a template). Use strong, unique values for all secrets in production.
+
+| Variable             | Required | Description |
+|----------------------|----------|-------------|
+| SERVICE_NAME         | Yes      | Service name (for logs/health). |
+| USER_PORT            | No       | HTTP server port (default `5111`). On Render, `PORT` is set automatically. |
+| REDIS_URI            | Yes      | Redis connection URL (e.g. `redis://…` or `rediss://…` for TLS). |
+| CORTEX_REDIS         | Yes      | Same Redis URL for ion-cortex. |
+| CORTEX_PREFIX        | Yes      | Key prefix for cortex (e.g. `school`). |
+| CORTEX_TYPE          | Yes      | Cortex type identifier (e.g. `school-management`). |
+| OYSTER_REDIS         | Yes      | Same Redis URL for OysterDB. |
+| OYSTER_PREFIX        | Yes      | OysterDB key prefix (e.g. `school`). |
+| CACHE_REDIS          | Yes      | Same Redis URL for cache. |
+| CACHE_PREFIX         | Yes      | Cache key prefix (e.g. `school:ch`). |
+| LONG_TOKEN_SECRET    | Yes      | **Secret.** JWT signing key for long-lived tokens. Set a long random string. |
+| SHORT_TOKEN_SECRET   | Yes      | **Secret.** JWT signing key for short-lived tokens. Set a long random string. |
+| NACL_SECRET          | Yes      | **Secret.** Symmetric key used by template. Set a long random string. |
+| SUPERADMIN_USERNAME  | Yes      | Username for the seeded superadmin (local/dev only; change in production). |
+| SUPERADMIN_PASSWORD  | Yes      | **Secret.** Password for the seeded superadmin. Use a strong password in production. |
+| SUPERADMIN_EMAIL     | Yes      | Email for the seeded superadmin. |
+
+Copy `.env.example` to `.env` and fill in values locally; for production, set variables in your host’s dashboard and never commit secrets.
 
 ## First Login
 
-- **Default credentials** (from `.env`):
-  - **username**: `SUPERADMIN_USERNAME` (default `superadmin`)
-  - **password**: `SUPERADMIN_PASSWORD` (default `Admin@1234`)
-- The superadmin is seeded automatically on startup (if no existing superadmin).
-- **Auth header**:
-  - Use **`token: <jwt>`** header on all protected endpoints.
-  - Do **not** use `Authorization: Bearer ...`.
-- Change the default superadmin password immediately in any non-local environment.
+- Credentials are set via `SUPERADMIN_USERNAME` and `SUPERADMIN_PASSWORD` in your environment. The superadmin is seeded on first startup if none exists.
+- **Auth header:** Use **`token: <jwt>`** on all protected endpoints (not `Authorization: Bearer`).
+- Change the default password immediately in any non-local environment.
 
 ## Full API Reference
 
