@@ -1,3 +1,4 @@
+console.log('[STARTUP] index.js entered');
 process.on('uncaughtException', (err) => {
     console.error('[STARTUP] Uncaught Exception:', err && err.message);
     if (err && err.stack) console.error(err.stack);
