@@ -1,4 +1,9 @@
-const emojis = require('../../public/emojis.data.json');
+let emojis = { value: [] };
+try {
+    emojis = require('../../public/emojis.data.json');
+} catch (e) {
+    // optional: use empty list if file missing
+}
 
 module.exports = {
     id: {
