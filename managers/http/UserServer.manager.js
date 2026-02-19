@@ -56,9 +56,10 @@ module.exports = class UserServer {
         /** a single middleware to handle all */
         app.all('/api/:moduleName/:fnName', this.userApi.mw);
 
+        const port = this.config.dotEnv.USER_PORT;
         let server = http.createServer(app);
-        server.listen(this.config.dotEnv.USER_PORT, () => {
-            console.log(`${(this.config.dotEnv.SERVICE_NAME).toUpperCase()} is running on port: ${this.config.dotEnv.USER_PORT}`);
+        server.listen(port, '0.0.0.0', () => {
+            console.log(`${(this.config.dotEnv.SERVICE_NAME).toUpperCase()} is running on port: ${port}`);
         });
     }
 };
